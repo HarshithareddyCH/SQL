@@ -148,9 +148,30 @@ having count(O1.customer_id)=2
 Select REVERSE(Name) as 'Reverse Name' ,UPPER(Location) as 'Capitalize' from Student_details
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --Query 11
-Create view [VIEW_NAME] as
-Select ProductName,Quantity,OrderNumber From Product p join orderitem oi on p.id=oi.productid 
-join order o on o.id=oi.orderid
+create table ORDERTABLE(
+	ordId int primary key,
+	orderDate date,
+	orderNumber int,
+	customerId int,
+	totalAmount float
+)
+create table PRODUCTTABLE(
+	prodId int primary key,
+	productName varchar(50),
+	supplierId int,
+	unitPrice float,
+	package float,
+	isDiscontinued bit
+)
+create table ORDERTABLEItem(
+	id int primary key,
+	orderId int references ORDERTABLE(ordId),
+	productId int references PRODUCTTABLE(prodId),
+	unitPrice float,
+	quantity int
+)
+create view ORDERPRODUCTVIEW as select productName, quantity, orderNumber from PRODUCTTABLE PR join ORDERTABLEItem OO on PR.prodId = OO.productId join ORDERTABLE o on o.ordId = OO.orderId;
+SELECT * from ORDERPRODUCTVIEW
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --Query 12
 Select C_name from details_Course cd join Course_Registration cr on cd.C_id=cr.Cid join
